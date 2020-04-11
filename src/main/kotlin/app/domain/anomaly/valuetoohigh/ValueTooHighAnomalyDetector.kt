@@ -4,10 +4,12 @@ import app.domain.anomaly.AnomalyDetector
 import app.domain.anomaly.AnomalyReport
 import app.domain.measurement.Measurement
 
-class ValueTooHighAnomalyDetector(private val repository: ValueTooHighAnomalyDefinitionRepository) : AnomalyDetector {
+class ValueTooHighAnomalyDetector(
+        private val definitionRepository: ValueTooHighAnomalyDefinitionRepository
+) : AnomalyDetector {
 
     override fun detectAll(measurement: Measurement): Sequence<AnomalyReport> {
-        return repository.findAll()
+        return definitionRepository.findAll()
                 .filter { it.compliesWith(measurement) }
                 .map { prepareReport(measurement, it) }
     }

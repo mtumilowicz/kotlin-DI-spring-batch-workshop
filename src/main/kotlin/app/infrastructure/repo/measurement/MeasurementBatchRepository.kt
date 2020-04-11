@@ -36,7 +36,6 @@ class MeasurementBatchRepository(
         return try {
             reader.read()
         } catch (e: Exception) {
-            e.printStackTrace()
             println("Cannot read a file: $path, reason: ${e.localizedMessage}")
             null
         }

@@ -3,11 +3,13 @@ package app.domain.measurement
 import app.domain.anomaly.AnomalyDetector
 import app.domain.anomaly.AnomalyReport
 
-class MeasurementService(private val detectors: List<AnomalyDetector>,
-                         private val measurementRepository: MeasurementRepository) {
+class MeasurementService(
+        private val detectors: List<AnomalyDetector>,
+        private val measurementRepository: MeasurementRepository
+) {
 
-    fun printAllAnomalyReports(): Unit {
-        measurementRepository.forAll { measurements: Sequence<Measurement> ->
+    fun printAllAnomalyReports() {
+        measurementRepository.forAll { measurements ->
             measurements
                     .flatMap { measurement: Measurement -> detectAnomalies(measurement) }
                     .map { it.report }
@@ -17,6 +19,6 @@ class MeasurementService(private val detectors: List<AnomalyDetector>,
 
     private fun detectAnomalies(measurement: Measurement): Sequence<AnomalyReport> {
         return detectors.asSequence()
-                .flatMap { detector: AnomalyDetector -> detector.detectAll(measurement) }
+                .flatMap { detector -> detector.detectAll(measurement) }
     }
 }

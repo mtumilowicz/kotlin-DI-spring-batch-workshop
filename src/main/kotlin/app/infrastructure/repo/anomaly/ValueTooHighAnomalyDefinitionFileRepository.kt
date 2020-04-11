@@ -20,7 +20,7 @@ class ValueTooHighAnomalyDefinitionFileRepository(
         try {
             Files.newBufferedReader(Paths.get(path)).use {
                 return gson.fromJson(it, Array<ValueTooHighAnomalyDefinitionDTO>::class.java)
-                        .map { it.toDomain() }
+                        .map { dto -> dto.toDomain() }
                         .asSequence()
             }
         } catch (e: Exception) {
