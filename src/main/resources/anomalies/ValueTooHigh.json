@@ -1,0 +1,10 @@
+[
+  {
+    "parentPattern": "D.*1",
+    "limit": 100
+  },
+  {
+    "parentPattern": "DC2",
+    "limit": 100
+  }
+]

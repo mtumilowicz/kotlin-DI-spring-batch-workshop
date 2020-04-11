@@ -1,0 +1,26 @@
+[
+  {
+    "parentId": "DC1",
+    "deviceId": "METER11",
+    "measuredValue": "100",
+    "timestamp": "2012-04-23T10:00:00.000Z"
+  },
+  {
+    "parentId": "DC1",
+    "deviceId": "METER12",
+    "measuredValue": "100.1",
+    "timestamp": "2012-04-23T10:15:00.000Z"
+  },
+  {
+    "parentId": "DC2",
+    "deviceId": "METER21",
+    "measuredValue": "100.2",
+    "timestamp": "2012-04-23T10:00:00.000Z"
+  },
+  {
+    "parentId": "DC2",
+    "deviceId": "METER22",
+    "measuredValue": "99.99",
+    "timestamp": "2012-04-23T10:15:00.000Z"
+  }
+]
