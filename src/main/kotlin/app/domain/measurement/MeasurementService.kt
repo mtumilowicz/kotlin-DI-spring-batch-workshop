@@ -8,17 +8,15 @@ class MeasurementService(
         private val measurementRepository: MeasurementRepository
 ) {
 
-    fun printAllAnomalyReports() {
-        measurementRepository.forAll { measurements ->
-            measurements
-                    .flatMap { detectAnomalies(it) }
-                    .map { it.report }
-                    .forEach(::println)
-        }
-    }
+    fun printAllAnomalyReports() =
+            measurementRepository.forAll { measurements ->
+                measurements
+                        .flatMap { detectAnomalies(it) }
+                        .map { it.report }
+                        .forEach(::println)
+            }
 
-    private fun detectAnomalies(measurement: Measurement): Sequence<AnomalyReport> {
-        return detectors.asSequence()
-                .flatMap { detector -> detector.detectAllAnomaliesIn(measurement) }
-    }
+    private fun detectAnomalies(measurement: Measurement): Sequence<AnomalyReport> =
+            detectors.asSequence()
+                    .flatMap { detector -> detector.detectAllAnomaliesIn(measurement) }
 }

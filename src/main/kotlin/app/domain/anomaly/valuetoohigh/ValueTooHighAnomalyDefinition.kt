@@ -11,7 +11,6 @@ class ValueTooHighAnomalyDefinition(
     constructor(parentIdPattern: Regex, limit: Limit) :
             this(ParentIdPattern(parentIdPattern), limit)
 
-    override fun compliesWith(measurement: Measurement): Boolean {
-        return measurement.parentIdMatches(parentIdPattern) and measurement.exceeds(limit)
-    }
+    override fun compliesWith(measurement: Measurement): Boolean =
+            measurement.parentIdMatches(parentIdPattern) and measurement.exceeds(limit)
 }

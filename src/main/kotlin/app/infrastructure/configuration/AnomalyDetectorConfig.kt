@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration
 class AnomalyDetectorConfig {
 
     @Bean
-    fun valueTooHighAnomalyDetector(repository: ValueTooHighAnomalyDefinitionRepository): ValueTooHighAnomalyDetector {
-        return ValueTooHighAnomalyDetector(repository)
-    }
+    fun valueTooHighAnomalyDetector(repository: ValueTooHighAnomalyDefinitionRepository): ValueTooHighAnomalyDetector =
+            ValueTooHighAnomalyDetector(repository)
 }

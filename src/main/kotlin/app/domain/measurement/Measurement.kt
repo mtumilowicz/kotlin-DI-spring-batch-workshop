@@ -9,12 +9,7 @@ class Measurement(
         private val measuredValue: MeasuredValue
 ) {
 
-    fun parentIdMatches(pattern: ParentIdPattern): Boolean {
-        return pattern.matches(parentId)
-    }
+    fun parentIdMatches(pattern: ParentIdPattern): Boolean = pattern.matches(parentId)
 
-    fun exceeds(limit: Limit): Boolean {
-        return measuredValue > limit
-    }
-
+    fun exceeds(limit: Limit): Boolean = measuredValue > limit
 }

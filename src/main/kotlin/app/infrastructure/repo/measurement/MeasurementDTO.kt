@@ -13,7 +13,5 @@ data class MeasurementDTO(val parentId: String,
 
     constructor() : this("", "", "")
 
-    fun toDomain(): Measurement {
-        return Measurement(ParentId(parentId), DeviceId(deviceId), MeasuredValue(measuredValue))
-    }
+    fun toDomain(): Measurement = Measurement(ParentId(parentId), DeviceId(deviceId), MeasuredValue(measuredValue))
 }

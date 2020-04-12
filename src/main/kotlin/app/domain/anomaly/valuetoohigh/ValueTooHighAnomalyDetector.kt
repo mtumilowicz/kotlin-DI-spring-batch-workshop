@@ -8,13 +8,13 @@ class ValueTooHighAnomalyDetector(
         private val definitionRepository: ValueTooHighAnomalyDefinitionRepository
 ) : AnomalyDetector {
 
-    override fun detectAllAnomaliesIn(measurement: Measurement): Sequence<AnomalyReport> {
-        return definitionRepository.findAll()
-                .filter { it.compliesWith(measurement) }
-                .map { prepareReport(measurement, it) }
-    }
+    override fun detectAllAnomaliesIn(measurement: Measurement): Sequence<AnomalyReport> =
+            definitionRepository.findAll()
+                    .filter { it.compliesWith(measurement) }
+                    .map { prepareReport(measurement, it) }
 
-    private fun prepareReport(measurement: Measurement, anomalyDefinition: ValueTooHighAnomalyDefinition): AnomalyReport {
-        return AnomalyReport("ValueTooHigh,${measurement.parentId},${anomalyDefinition.limit}")
-    }
+
+    private fun prepareReport(measurement: Measurement, anomalyDefinition: ValueTooHighAnomalyDefinition): AnomalyReport =
+            AnomalyReport("ValueTooHigh,${measurement.parentId},${anomalyDefinition.limit}")
+
 }

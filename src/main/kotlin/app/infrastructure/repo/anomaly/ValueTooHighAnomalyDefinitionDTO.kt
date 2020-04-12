@@ -8,7 +8,5 @@ data class ValueTooHighAnomalyDefinitionDTO(
         val limit: String
 ) {
 
-    fun toDomain(): ValueTooHighAnomalyDefinition {
-        return ValueTooHighAnomalyDefinition(parentPattern.toRegex(), Limit(limit))
-    }
+    fun toDomain(): ValueTooHighAnomalyDefinition = ValueTooHighAnomalyDefinition(parentPattern.toRegex(), Limit(limit))
 }

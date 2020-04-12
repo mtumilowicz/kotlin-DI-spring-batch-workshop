@@ -27,19 +27,17 @@ class MeasurementBatchRepository(
         }
     }
 
-    private fun findAll(reader: JsonItemReader<MeasurementDTO>): Sequence<Measurement> {
-        return generateSequence { tryToRead(reader) }
-                .map(MeasurementDTO::toDomain)
-    }
+    private fun findAll(reader: JsonItemReader<MeasurementDTO>): Sequence<Measurement> =
+            generateSequence { tryToRead(reader) }
+                    .map(MeasurementDTO::toDomain)
 
-    private fun tryToRead(reader: JsonItemReader<MeasurementDTO>): MeasurementDTO? {
-        return try {
-            reader.read()
-        } catch (e: Exception) {
-            println("Cannot read a file: $path, reason: ${e.localizedMessage}")
-            null
-        }
-    }
+    private fun tryToRead(reader: JsonItemReader<MeasurementDTO>): MeasurementDTO? =
+            try {
+                reader.read()
+            } catch (e: Exception) {
+                println("Cannot read a file: $path, reason: ${e.localizedMessage}")
+                null
+            }
 
     private fun measurementJsonReader(): JsonItemReader<MeasurementDTO> {
         val objectMapper = ObjectMapper()

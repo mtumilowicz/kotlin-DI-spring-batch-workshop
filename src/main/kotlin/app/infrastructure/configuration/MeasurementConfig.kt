@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 class MeasurementConfig {
 
     @Bean
-    fun measurementService(detectors: List<AnomalyDetector>, measurementRepository: MeasurementRepository): MeasurementService {
-        return MeasurementService(detectors, measurementRepository)
-    }
+    fun measurementService(detectors: List<AnomalyDetector>, measurementRepository: MeasurementRepository): MeasurementService =
+            MeasurementService(detectors, measurementRepository)
 }

@@ -8,7 +8,6 @@ class MeasuredValue(private val raw: BigDecimal) {
     constructor(limit: String) : this(BigDecimal(limit))
 
 
-    operator fun compareTo(limit: Limit): Int {
-        return raw.compareTo(limit.raw)
-    }
+    operator fun compareTo(limit: Limit): Int =
+            raw.compareTo(limit.raw)
 }

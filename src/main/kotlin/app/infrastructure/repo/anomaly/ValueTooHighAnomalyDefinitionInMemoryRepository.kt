@@ -12,7 +12,5 @@ class ValueTooHighAnomalyDefinitionInMemoryRepository : ValueTooHighAnomalyDefin
             ValueTooHighAnomalyDefinition(Regex("A.22"), Limit("100.0"))
     )
 
-    override fun findAll(): Sequence<ValueTooHighAnomalyDefinition> {
-        return data.asSequence()
-    }
+    override fun findAll(): Sequence<ValueTooHighAnomalyDefinition> = data.asSequence()
 }
