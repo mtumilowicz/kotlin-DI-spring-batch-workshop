@@ -1,29 +1,30 @@
 package app.domain.measurement
 
+import app.domain.anomaly.Limit
+import app.domain.anomaly.valuetoohigh.ParentIdPattern
+import kotlin.text.Regex
 import spock.lang.Specification
-
-import java.util.regex.Pattern
 
 class MeasurementTest extends Specification {
     def 'ParentIdMatches'() {
         given:
-        def measurement = new Measurement('parentId1', 'deviceId1', 110.1)
+        def measurement = new Measurement(new ParentId('parentId1'), 'deviceId1', new MeasuredValue(110.1))
 
         expect:
-        measurement.parentIdMatches(_pattern) == result
+        measurement.parentIdMatches(new ParentIdPattern(new Regex(_pattern))) == result
 
         where:
-        _pattern                                         || result
-        Pattern.compile("[a-zA-Z]").asMatchPredicate()   || false
-        Pattern.compile("[a-zA-z]+1").asMatchPredicate() || true
+        _pattern     || result
+        "[a-zA-Z]"   || false
+        "[a-zA-z]+1" || true
     }
 
     def 'ExceedsLimit'() {
         given:
-        def measurement = new Measurement('parentId1', 'deviceId1', 110.1)
+        def measurement = new Measurement(new ParentId('parentId1'), 'deviceId1', new MeasuredValue(110.1))
 
         expect:
-        measurement.exceedsLimit(_limit) == exceeds
+        measurement.exceeds(new Limit(_limit)) == exceeds
 
         where:
         _limit || exceeds

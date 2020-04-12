@@ -21,6 +21,6 @@ class MeasurementServiceTest extends Specification {
 
         then: 'verify out'
         def out = buffer.toString().split() as List
-        out == ['ValueTooHigh,DC1,100', 'ValueTooHigh,DC2,100']
+        out == ['ValueTooHigh,ParentId(DC1),Limit(100)', 'ValueTooHigh,ParentId(DC2),Limit(100)']
     }
 }

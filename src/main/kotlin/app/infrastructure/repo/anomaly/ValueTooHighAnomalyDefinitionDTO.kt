@@ -1,5 +1,6 @@
 package app.infrastructure.repo.anomaly
 
+import app.domain.anomaly.Limit
 import app.domain.anomaly.valuetoohigh.ValueTooHighAnomalyDefinition
 import java.math.BigDecimal
 
@@ -9,6 +10,6 @@ data class ValueTooHighAnomalyDefinitionDTO(
 ) {
 
     fun toDomain(): ValueTooHighAnomalyDefinition {
-        return ValueTooHighAnomalyDefinition(parentPattern, BigDecimal(limit))
+        return ValueTooHighAnomalyDefinition(Regex(parentPattern), Limit(limit))
     }
 }

@@ -8,7 +8,7 @@ class ValueTooHighAnomalyDetector(
         private val definitionRepository: ValueTooHighAnomalyDefinitionRepository
 ) : AnomalyDetector {
 
-    override fun detectAll(measurement: Measurement): Sequence<AnomalyReport> {
+    override fun detectAllAnomaliesIn(measurement: Measurement): Sequence<AnomalyReport> {
         return definitionRepository.findAll()
                 .filter { it.compliesWith(measurement) }
                 .map { prepareReport(measurement, it) }

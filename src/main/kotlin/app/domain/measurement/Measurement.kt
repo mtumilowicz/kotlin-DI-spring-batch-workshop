@@ -1,19 +1,19 @@
 package app.domain.measurement
 
-import java.math.BigDecimal
-import java.util.function.Predicate
+import app.domain.anomaly.Limit
+import app.domain.anomaly.valuetoohigh.ParentIdPattern
 
 class Measurement(
-        val parentId: String,
+        val parentId: ParentId,
         private val deviceId: String,
-        private val measuredValue: BigDecimal
+        private val measuredValue: MeasuredValue
 ) {
 
-    fun parentIdMatches(pattern: Predicate<String>): Boolean {
-        return pattern.test(parentId)
+    fun parentIdMatches(pattern: ParentIdPattern): Boolean {
+        return pattern.matches(parentId)
     }
 
-    fun exceedsLimit(limit: BigDecimal): Boolean {
+    fun exceeds(limit: Limit): Boolean {
         return measuredValue > limit
     }
 

@@ -17,7 +17,7 @@ class AppApplication {
             try {
                 measurementService.printAllAnomalyReports()
             } catch (ex: Exception) {
-                println("Error when printing all anomalies: " + ex.localizedMessage)
+                println("Error when printing all anomalies: ${ex.localizedMessage}")
                 System.exit(-1)
             }
         }

@@ -11,7 +11,7 @@ class MeasurementService(
     fun printAllAnomalyReports() {
         measurementRepository.forAll { measurements ->
             measurements
-                    .flatMap { measurement: Measurement -> detectAnomalies(measurement) }
+                    .flatMap { detectAnomalies(it) }
                     .map { it.report }
                     .forEach(::println)
         }
@@ -19,6 +19,6 @@ class MeasurementService(
 
     private fun detectAnomalies(measurement: Measurement): Sequence<AnomalyReport> {
         return detectors.asSequence()
-                .flatMap { detector -> detector.detectAll(measurement) }
+                .flatMap { detector -> detector.detectAllAnomaliesIn(measurement) }
     }
 }

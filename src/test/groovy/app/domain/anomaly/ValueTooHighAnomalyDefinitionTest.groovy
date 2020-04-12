@@ -1,17 +1,20 @@
 package app.domain.anomaly
 
 import app.domain.anomaly.valuetoohigh.ValueTooHighAnomalyDefinition
+import app.domain.measurement.MeasuredValue
 import app.domain.measurement.Measurement
+import app.domain.measurement.ParentId
+import kotlin.text.Regex
 import spock.lang.Specification
 
 class ValueTooHighAnomalyDefinitionTest extends Specification {
 
     def 'CompliesWith'() {
         given: 'prepare definition with pattern and limit'
-        def definition = new ValueTooHighAnomalyDefinition('D.*1', 15.3)
+        def definition = new ValueTooHighAnomalyDefinition(new Regex('D.*1'), new Limit(15.3))
 
         and: 'prepare measurement'
-        def measurement = new Measurement(_parentId, _deviceId, _measuredValue)
+        def measurement = new Measurement(new ParentId(_parentId), _deviceId, new MeasuredValue(_measuredValue))
 
         expect: 'find anomalies'
         definition.compliesWith(measurement) == anomaly

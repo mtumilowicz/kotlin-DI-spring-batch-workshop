@@ -1,8 +1,9 @@
 package app.infrastructure.repo.measurement
 
+import app.domain.measurement.MeasuredValue
 import app.domain.measurement.Measurement
+import app.domain.measurement.ParentId
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import java.math.BigDecimal
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class MeasurementDTO(val parentId: String,
@@ -12,6 +13,6 @@ data class MeasurementDTO(val parentId: String,
     constructor() : this("", "", "")
 
     fun toDomain(): Measurement {
-        return Measurement(parentId, deviceId, BigDecimal(measuredValue))
+        return Measurement(ParentId(parentId), deviceId, MeasuredValue(measuredValue))
     }
 }
