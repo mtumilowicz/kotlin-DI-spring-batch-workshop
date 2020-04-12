@@ -1,11 +1,11 @@
 package app.domain.measurement
 
-import app.domain.anomaly.Limit
+import app.domain.anomaly.valuetoohigh.Limit
 import app.domain.anomaly.valuetoohigh.ParentIdPattern
 
 class Measurement(
         val parentId: ParentId,
-        private val deviceId: String,
+        private val deviceId: DeviceId,
         private val measuredValue: MeasuredValue
 ) {
 

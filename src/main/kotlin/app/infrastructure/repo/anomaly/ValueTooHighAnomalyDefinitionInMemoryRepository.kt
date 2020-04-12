@@ -1,6 +1,6 @@
 package app.infrastructure.repo.anomaly
 
-import app.domain.anomaly.Limit
+import app.domain.anomaly.valuetoohigh.Limit
 import app.domain.anomaly.valuetoohigh.ValueTooHighAnomalyDefinition
 import app.domain.anomaly.valuetoohigh.ValueTooHighAnomalyDefinitionRepository
 

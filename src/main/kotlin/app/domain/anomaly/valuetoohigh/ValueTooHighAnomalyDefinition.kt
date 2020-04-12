@@ -1,7 +1,6 @@
 package app.domain.anomaly.valuetoohigh
 
 import app.domain.anomaly.AnomalyDefinition
-import app.domain.anomaly.Limit
 import app.domain.measurement.Measurement
 
 class ValueTooHighAnomalyDefinition(

@@ -1,5 +1,6 @@
 package app.infrastructure.repo.measurement
 
+import app.domain.measurement.DeviceId
 import app.domain.measurement.MeasuredValue
 import app.domain.measurement.Measurement
 import app.domain.measurement.ParentId
@@ -13,6 +14,6 @@ data class MeasurementDTO(val parentId: String,
     constructor() : this("", "", "")
 
     fun toDomain(): Measurement {
-        return Measurement(ParentId(parentId), deviceId, MeasuredValue(measuredValue))
+        return Measurement(ParentId(parentId), DeviceId(deviceId), MeasuredValue(measuredValue))
     }
 }

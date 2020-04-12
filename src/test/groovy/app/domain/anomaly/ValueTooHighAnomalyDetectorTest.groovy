@@ -1,6 +1,7 @@
 package app.domain.anomaly
 
 import app.domain.anomaly.valuetoohigh.ValueTooHighAnomalyDetector
+import app.domain.measurement.DeviceId
 import app.domain.measurement.MeasuredValue
 import app.domain.measurement.Measurement
 import app.domain.measurement.ParentId
@@ -16,7 +17,11 @@ class ValueTooHighAnomalyDetectorTest extends Specification {
         def detector = new ValueTooHighAnomalyDetector(new ValueTooHighAnomalyDefinitionInMemoryRepository())
 
         and:
-        def measurement = new Measurement(new ParentId(_parentId), _deviceId, new MeasuredValue(_measuredValue))
+        def measurement = new Measurement(
+                new ParentId(_parentId),
+                new DeviceId(_deviceId),
+                new MeasuredValue(_measuredValue)
+        )
 
         expect:
         detector.detectAllAnomaliesIn(measurement)*.report == anomalies

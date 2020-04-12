@@ -1,6 +1,6 @@
 package app.domain.measurement
 
-import app.domain.anomaly.Limit
+import app.domain.anomaly.valuetoohigh.Limit
 import java.math.BigDecimal
 
 class MeasuredValue(private val raw: BigDecimal) {
