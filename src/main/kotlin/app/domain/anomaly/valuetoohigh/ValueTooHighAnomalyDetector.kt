@@ -10,8 +10,8 @@ class ValueTooHighAnomalyDetector(
 
     override fun detectAllAnomaliesIn(measurement: Measurement): Sequence<AnomalyReport> =
             definitionRepository.findAll()
-                    .filter { it.compliesWith(measurement) }
-                    .map { prepareReport(measurement, it) }
+                    .filter { definition -> definition.compliesWith(measurement) }
+                    .map { definition -> prepareReport(measurement, definition) }
 
 
     private fun prepareReport(measurement: Measurement, anomalyDefinition: ValueTooHighAnomalyDefinition): AnomalyReport =
