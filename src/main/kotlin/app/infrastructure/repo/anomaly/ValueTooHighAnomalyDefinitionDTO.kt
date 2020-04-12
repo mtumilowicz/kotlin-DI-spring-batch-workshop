@@ -9,6 +9,6 @@ data class ValueTooHighAnomalyDefinitionDTO(
 ) {
 
     fun toDomain(): ValueTooHighAnomalyDefinition {
-        return ValueTooHighAnomalyDefinition(Regex(parentPattern), Limit(limit))
+        return ValueTooHighAnomalyDefinition(parentPattern.toRegex(), Limit(limit))
     }
 }
