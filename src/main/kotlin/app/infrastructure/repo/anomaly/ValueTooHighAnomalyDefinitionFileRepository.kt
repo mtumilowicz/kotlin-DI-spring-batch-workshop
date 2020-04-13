@@ -17,15 +17,15 @@ class ValueTooHighAnomalyDefinitionFileRepository(
     private val gson: Gson = Gson()
 
     override fun findAll(): Sequence<ValueTooHighAnomalyDefinition> {
-        try {
+        return try {
             Files.newBufferedReader(Paths.get(path)).use {
-                return gson.fromJson(it, Array<ValueTooHighAnomalyDefinitionDTO>::class.java)
+                gson.fromJson(it, Array<ValueTooHighAnomalyDefinitionDTO>::class.java)
                         .map { dto -> dto.toDomain() }
                         .asSequence()
             }
         } catch (e: Exception) {
             println("Problem with IO with the file: $path, reason: ${e.localizedMessage}")
-            return emptySequence()
+            emptySequence()
         }
     }
 }
