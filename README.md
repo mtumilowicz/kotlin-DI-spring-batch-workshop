@@ -124,3 +124,41 @@ parameters, ensuring that your Kotlin code remains clean and idiomatic
     * For regular function calls, the JVM already provides powerful inlining support. It
       analyzes the execution of your code and inlines calls whenever doing so provides the
       most benefit. This happens automatically while translating bytecode to machine code.
+### return
+* Return statements in lambdas: return from an enclosing function
+    * If you use the return keyword in a lambda, it returns from the function in which you called
+      the lambda, not just from the lambda itself
+    * Such a return statement is called a non-
+      local return, because it returns from a larger block than the block containing the
+      return statement.
+    * To understand the logic behind the rule, think about using a return keyword in a
+      for loop or a synchronized block in a Java method. It’s obvious that it returns from
+      the function and not from the loop or block. Kotlin allows you to preserve the same
+      behavior when you switch from language features to functions that take lambdas as
+      arguments.
+    * Using the return expres-
+      sion in lambdas passed to non-inline functions isn’t allowed. A non-inline function
+      can save the lambda passed to it in a variable and execute it later, when the function
+      has already returned, so it’s too late for the lambda to affect when the surrounding
+      function returns.
+    * You can write a local return from a lambda expression as well. A local return in a
+      lambda is similar to a break expression in a for loop.
+      * Returns from a lambda use
+        the “@” character to mark a label
+      * people.forEach label@{
+            if (it.name == "Alice") return@label
+        }
+        people.forEach @{
+                    if (it.name == "Alice") return@forEach
+                }
+#### Anonymous functions return
+* Anonymous functions: local returns by default
+    fun lookForAlice(people: List<Person>) {
+    people.forEach(fun (person) {
+    if (person.name == "Alice") return // “return” refers to the closest function: an anonymous function
+    println("${person.name} is not Alice")
+    })
+    }
+    * The rule is simple: return returns
+      from the closest function declared using the fun keyword. Lambda expressions don’t use the
+      fun keyword, so a return in a lambda returns from the outer function.
