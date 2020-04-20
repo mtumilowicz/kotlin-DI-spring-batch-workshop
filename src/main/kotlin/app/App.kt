@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.context.annotation.Bean
 
 @SpringBootApplication(exclude = [DataSourceAutoConfiguration::class])
-class AppApplication {
+class App {
 
     @Bean
     fun appRunner(measurementService: MeasurementService): ApplicationRunner {
@@ -26,7 +26,7 @@ class AppApplication {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            SpringApplication.run(AppApplication::class.java, *args)
+            SpringApplication.run(App::class.java, *args)
         }
     }
 }
