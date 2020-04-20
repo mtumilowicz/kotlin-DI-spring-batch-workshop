@@ -4,6 +4,51 @@
 * https://marcin-chwedczuk.github.io/lambda-expressions-in-kotlin
 * https://www.packtpub.com/application-development/programming-kotlin
 
+## preface
+* goals of this workshop:
+    * introduce basic kotlin syntax
+    * discuss kotlin's concept of function and lambda
+    * gentle introduction into spring batch fundamentals
+* workshop: workshop package, answers: answers package
+
+## task
+
+## basic kotlin syntax
+* val var
+* string templates
+* === vs ==: Referential equality and structural equality
+* class
+* data class
+* named parameters, default parameters
+* operators
+* null safety
+    * val name: String = null // does not compile
+    * val name: String? = null
+* ?.
+* Elvis operator
+* lists
+    * The Kotlin standard library reference says that both filter and map return a list. That
+      means this chain of calls will create two lists: one to hold the results of the filter
+      function and another for the results of map . This isn’t a problem when the source list
+      contains two elements, but it becomes much less efficient if you have a million.
+* sequences
+    * the Kotlin equivalent of Stream types
+    * The entry point for lazy collection operations in Kotlin is the Sequence interface.
+      The interface represents just that: a sequence of elements that can be enumerated
+      one by one. Sequence provides only one method, iterator , that you can use to
+      obtain the values from the sequence.
+    * The elements in a sequence are evaluated lazily
+    * intermediate and terminal operations
+    fun <T, R> Sequence<T>.map(transform: (T) -> R): Sequence<R> {
+    return TransformingSequence(this, transform)
+    }
+    * The map function doesn’t call the function passed as the transform parameter
+      directly. Instead, it passes this function to the constructor of a class that stores it in a
+      property.
+    * To support that, the lambda passed as the transform argument needs to be
+    compiled into the standard non-inline representation, as an anonymous class imple-
+    menting a function interface
+
 ## functions
 * Under the hood, function types are declared as regular interfaces: a variable of a func-
   tion type is an implementation of a FunctionN interface
