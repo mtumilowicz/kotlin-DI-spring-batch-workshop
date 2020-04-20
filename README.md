@@ -2,6 +2,7 @@
 
 * https://www.manning.com/books/kotlin-in-action
 * https://marcin-chwedczuk.github.io/lambda-expressions-in-kotlin
+* https://www.packtpub.com/application-development/programming-kotlin
 
 ## functions
 * Under the hood, function types are declared as regular interfaces: a variable of a func-
@@ -14,7 +15,52 @@
     method, and calling it will execute the function
   * Java 8 lamb-
     das are automatically converted to values of function types
+* In members of a class, this refers to the class instance. In extension functions, this refers
+  to the instance that the extension function was applied to.
+* Kotlin allows us to take this a step further by supporting functions declared inside other
+  functions. These are called local or nested functions. Functions can even be nested multiple
+  times.
+* In addition to member functions and local functions, Kotlin also supports declaring top-
+  level functions. These are functions that exist outside of any class, object, or interface and
+  are defined directly inside a file.
+* Named parameters
+* Default parameters
+* Single abstract methods
+    * Kotlin has support for converting a function literal directly
+      into a SAM
     
+    val threadPool = Executors.newFixedThreadPool(4)
+    threadPool.submit {
+    println("I don't have a lot of work to do")
+    }
+    
+    same as
+    
+    threadPool.submit(object : Runnable {
+    override fun run() {
+    println("I don't have a lot of work to do")
+    }
+    })
+    * works for interfaces and not abstract classes,
+      even if the abstract class only has a single method
+    * Kotlin will not perform this conversion on SAMs that are defined in Kotlin
+      itself. This is because in Kotlin, you can define your function to accept
+      another function, making this kind of pattern redundant
+      ```
+      interface X : () -> Unit {
+          fun x(): Unit
+      }
+      
+      class Y {
+          fun z(x: Runnable) {
+          }
+      }
+      
+      fun main() {
+          val x: X = { println("a") }
+          Y().z { println("a") }
+      }
+      ```
 ## lambda
 * a lambda encodes a small piece of behavior that you can pass around as a value
 * syntax
@@ -124,6 +170,47 @@ parameters, ensuring that your Kotlin code remains clean and idiomatic
     * For regular function calls, the JVM already provides powerful inlining support. It
       analyzes the execution of your code and inlines calls whenever doing so provides the
       most benefit. This happens automatically while translating bytecode to machine code.
+    * If we were to mark the withResource function as inline, then the Kotlin compiler would
+      not generate this as an invocation on a new instance, but instead would generate the code at
+      the call site.
+      Firstly, we annotate the function with the keyword:
+      inline fun <T : AutoCloseable, U> withResource(resource: T, fn: (T) ->
+      U): U {
+      try {
+      return fn(resource)
+      } finally {
+      resource.close()
+      }
+      }
+      The compiler would translate an invocation of characterCount into the following:
+      fun characterCountExpanded(filename: String): Int {
+      val input = Files.newInputStream(Paths.get(filename))
+      try {
+      return input.buffered().reader().readText().length
+      } finally {
+      input.close()
+      }
+      }
+* It turns out that all functions in Kotlin are compiled into instances of classes called
+  Function0 , Function1 , Function2 , and so on
+  * For example, a function with the signature
+    (Int)->Boolean would show the type as Function1<Int, Boolean> 
+  * Each of the
+    function classes also has an invoke member function that is used to apply the body of the
+    function.
+  ```
+  /** A function that takes 1 argument. */
+  public interface Function1<in P1, out R> : Function<R> {
+  /** Invokes the function with the specified argument. */
+  public operator fun invoke(p1: P1): R
+  }
+  ```
+  *  Since functions have no state other than their inputs, they can be modeled as a
+    singleton instance via a static method.
+    Closures are implemented by increasing the arity of the function to accept
+    extra parameters, which are the closed-over variables. The compiler inserts
+    this automatically.
+
 ### return
 * Return statements in lambdas: return from an enclosing function
     * If you use the return keyword in a lambda, it returns from the function in which you called
