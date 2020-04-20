@@ -10,7 +10,7 @@ import java.nio.file.Paths
 
 @Component
 class ValueTooHighAnomalyDefinitionFileRepository(
-        @Value("\${anomaly.definition.path.valueTooHigh}")
+        @Value("\${anomaly.definition.valueTooHigh.file.path}")
         val path: String
 ) : ValueTooHighAnomalyDefinitionRepository {
 

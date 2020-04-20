@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     id("groovy")
@@ -25,6 +26,24 @@ dependencies {
     testImplementation("org.springframework.batch:spring-batch-test")
     testImplementation("org.spockframework:spock-spring:1.3-groovy-2.5")
     testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
+}
+
+task("bootRunDev", BootRun::class) {
+    dependsOn(tasks.build)
+    doFirst {
+        main = tasks.bootJar.map { it.mainClassName }.get()
+        classpath = sourceSets.main.map { it.runtimeClasspath }.get()
+        systemProperty("spring.profiles.active", "dev")
+    }
+}
+
+task("bootRunProd", BootRun::class) {
+    dependsOn(tasks.build)
+    doFirst {
+        main = tasks.bootJar.map { it.mainClassName }.get()
+        classpath = sourceSets.main.map { it.runtimeClasspath }.get()
+        systemProperty("spring.profiles.active", "prod")
+    }
 }
 
 tasks.withType<KotlinCompile> {

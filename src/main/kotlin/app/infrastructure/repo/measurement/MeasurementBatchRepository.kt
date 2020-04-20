@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class MeasurementBatchRepository(
-        @Value("\${measurements.path}")
+        @Value("\${measurements.file.path}")
         val path: String
 ) : MeasurementRepository {
 
