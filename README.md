@@ -14,40 +14,65 @@
 ## task
 
 ## basic kotlin syntax
-* val var
-* string templates
-* === vs ==: Referential equality and structural equality
+* `val` vs `var` = `final` vs `non-final`
+* string templates: "#{person.name} has accomplished test with $score"
+* `===` vs `==`: referential equality (java's `==`) vs structural equality (java's `equals`)
 * class
+    ```
+    class Person( // primary constructor
+        // fields with automatic getters
+    ) {
+        constructor(...): this(...) { // through primary constructor
+            // other things
+        }
+  
+        fun method(...): return_type {
+  
+        }
+    }
+    ```
 * data class
+    * `data` keyword before class
+    * `equals()/hashCode()` pair
+    * `toString()`
+    * `componentN()` functions - destructuring
+    * `copy()`
+* companion object - way of declaring static properties
 * named parameters, default parameters
 * operators
+    ```
+    operator fun compareTo(limit: Limit): Int = compareValues(raw, limit.raw)
+    ```
 * null safety
-    * val name: String = null // does not compile
-    * val name: String? = null
-* ?.
-* Elvis operator
+    * `String? = String + null`
+    * `val name: String = null` // does not compile
+    * `val name: String? = null` // compile
+* safe call operator: `?.`
+    * `b?.length ~ b != null ? b.length : null`
+    * in kotlin there is no ternary operator
+* Elvis operator: `?:`
+    * `b?.length ?: -1 ~ b != null ? b.length : -1`
 * lists
-    * The Kotlin standard library reference says that both filter and map return a list. That
-      means this chain of calls will create two lists: one to hold the results of the filter
-      function and another for the results of map . This isn’t a problem when the source list
-      contains two elements, but it becomes much less efficient if you have a million.
+    * `listOf()`
+    * both filter and map return a list
+        * it becomes much less efficient if you have a million
 * sequences
-    * the Kotlin equivalent of Stream types
-    * The entry point for lazy collection operations in Kotlin is the Sequence interface.
-      The interface represents just that: a sequence of elements that can be enumerated
-      one by one. Sequence provides only one method, iterator , that you can use to
-      obtain the values from the sequence.
-    * The elements in a sequence are evaluated lazily
-    * intermediate and terminal operations
-    fun <T, R> Sequence<T>.map(transform: (T) -> R): Sequence<R> {
-    return TransformingSequence(this, transform)
+    ```
+    public interface Sequence<out T> {
+        public operator fun iterator(): Iterator<T>
     }
-    * The map function doesn’t call the function passed as the transform parameter
-      directly. Instead, it passes this function to the constructor of a class that stores it in a
-      property.
-    * To support that, the lambda passed as the transform argument needs to be
-    compiled into the standard non-inline representation, as an anonymous class imple-
-    menting a function interface
+    ```
+    * equivalent of Stream types
+    * a sequence of elements that can be enumerated one by one
+    * intermediate and terminal operations
+        * map passes function to the constructor of a class that stores it in a property
+            ```
+            fun <T, R> Sequence<T>.map(transform: (T) -> R): Sequence<R> {
+                return TransformingSequence(this, transform)
+            }
+            ```
+        * needs non-inline representation of lambda - passed is an anonymous class implementing 
+        a function interface
 
 ## functions
 * Under the hood, function types are declared as regular interfaces: a variable of a func-
