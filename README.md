@@ -5,6 +5,8 @@
 * https://www.packtpub.com/application-development/programming-kotlin
 * https://stackoverflow.com/questions/53810536/how-can-i-get-sam-interfaces-object-in-kotlin
 * https://github.com/JetBrains/kotlin/blob/master/spec-docs/function-types.md
+* https://docs.spring.io/spring-batch/docs/4.2.x/reference/html/index.html
+* https://docs.spring.io/spring-batch/docs/4.2.x/reference/html/readersAndWriters.html#JsonItemReader
 
 ## preface
 * goals of this workshop:
@@ -189,3 +191,5 @@ anonymous class instance is reused between calls
 * inline modifier - the compiler will replace every call with the body of lambda
 * lambdas used to process a sequence can’t be inlined
 * remember that JVM already provides powerful inlining support (JIT)
+
+## spring batch
