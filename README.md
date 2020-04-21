@@ -74,17 +74,21 @@
         * needs non-inline representation of lambda - passed is an anonymous class implementing 
         a function interface
 
-## functions
+## function
+```
+fun run() {}
+val run: () -> Unit = ::run
+```
 * `FunctionN` interface
     * `Function0<R>` (this function takes no arguments)
     * `Function1<P1, R>` (this function takes one argument), and so on
     * each interface defines a single `invoke` method
+* support for top-level functions - defined directly inside a file
 * `this`
+    * top-level - no context
     * in members of a class - refers to the class instance
     * in extension functions - refers to the instance that the extension function was applied to
-* support for functions declared inside other functions
-    * called local or nested functions
-* support for top-level functions - defined directly inside a file
+* local or nested functions - functions declared inside other functions
 * java context - automatic SAM conversion
     ```
     val threadPool = Executors.newFixedThreadPool(4)
@@ -126,20 +130,8 @@
     people.maxBy { p -> p.age } // Parameter type inferred
     people.maxBy { it.age } // it syntax
     ```
-* If you use a lambda in a function, you can access the parameters of that function as well as the local 
-variables declared before the lambda
-    * One important difference between Kotlin and Java is that in Kotlin, you aren’t restricted to accessing 
-    final variables
-    * You can also modify variables from within a lambda
-    * You know that when you declare an anonymous inner class in a function, you can refer
-      to parameters and local variables of that function from inside the class
-        * only final or effectively final
-* When you capture a final variable, its value is stored together with the lambda code that uses it
-* For non-final variables, the value is enclosed in a special wrapper that lets you change it, and the 
-reference to the wrapper is stored together with the lambda
-  * java: When you want to capture a mutable variable, you can use one of the following tricks: either 
-  declare an array of one element in which to store the mutable value, or create an instance of a wrapper 
-  class that stores the reference that can be changed
+* in lambda you aren’t restricted to accessing effectively final variables
+  * java: when you want to capture a mutable variable - array or wrapper
   * kotlin:
     ```
     var counter = 0
@@ -151,26 +143,12 @@ reference to the wrapper is stored together with the lambda
     val counter = Ref(0)
     val inc = { counter.value++ }    
     ```
-* Member references
-    * val getAge = { person: Person -> person.age }
-    * val getAge = Person::age
-    * You can have a reference to a function that’s declared at the top level (and isn’t a
-      member of a class)
-      * run(::salute)
-    * function taking several parameters
-        val action = { person: Person, message: String ->
-        sendEmail(person, message)
-        }
-        val nextAction = ::sendEmail
+* static references
+    * val getAge = Person::age // member reference
+    * val getAge = p::age // bound member reference
+    * run(::salute) // top-level reference
+    * val nextAction = ::sendEmail // several parameters - sendEmail(person, message)
     * val createPerson = ::Person // constructor reference
-    * Note that you can also reference extension functions the same way:
-      fun Person.isAdult() = age >= 21
-      val predicate = Person::isAdult
-    * A bound member reference
-        val dmitrysAgeFunction = p::age
-        println(dmitrysAgeFunction())
-* Kotlin allows you to use lambdas when calling Java methods that take functional interfaces as 
-parameters, ensuring that your Kotlin code remains clean and idiomatic
 
 ### compilation
 * creating an anonymous object that implements Runnable explicitly:
