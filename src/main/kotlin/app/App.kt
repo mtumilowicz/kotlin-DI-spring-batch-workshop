@@ -1,6 +1,6 @@
 package app
 
-import app.domain.measurement.MeasurementService
+import app.answers.domain.measurement.MeasurementService
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.SpringApplication
