@@ -115,7 +115,7 @@ val run: () -> Unit = ::run
     javaRun = kotlinRun
     kotlinRun = javaRun
     ```
-
+  
 ## lambda
 * encodes a small piece of behavior that you can pass around as a value
 * syntax
@@ -151,7 +151,25 @@ val run: () -> Unit = ::run
     * run(::salute) // top-level reference
     * val nextAction = ::sendEmail // several parameters - sendEmail(person, message)
     * val createPerson = ::Person // constructor reference
-
+* return from an enclosing function (not just from the lambda itself)
+    * rule is simple: 
+        * return returns from the closest function declared using the fun keyword
+        * lambda has no fun keyword, so a return returns from the outer function
+    * it is called a non-local return as it returns from a larger block than the block containing the 
+    return statement
+    * think about return in a for loop - also returns from the function and not from the loop or block
+    * a local return in a lambda is similar to a break expression in a for loop
+        ```
+        people.forEach label@{ if (it.name == "Alice") return@label }
+        ```
+    * anonymous functions has local returns
+        ```
+        people.forEach(fun (person) {
+            if(...) return // “return” refers to the closest function: an anonymous function
+            ...
+        })
+        ```
+      
 ### compilation
 * Kotlin 1.0 - every lambda expression is compiled into an anonymous class, unless it’s an inline lambda
 * name: `Method$1`, where `Method` - name of the function in which the lambda is declared
@@ -168,42 +186,3 @@ anonymous class instance is reused between calls
 * inline modifier - the compiler will replace every call with the body of lambda
 * lambdas used to process a sequence can’t be inlined
 * remember that JVM already provides powerful inlining support (JIT)
-    
-### return
-* Return statements in lambdas: return from an enclosing function
-    * If you use the return keyword in a lambda, it returns from the function in which you called
-      the lambda, not just from the lambda itself
-    * Such a return statement is called a non-
-      local return, because it returns from a larger block than the block containing the
-      return statement.
-    * To understand the logic behind the rule, think about using a return keyword in a
-      for loop or a synchronized block in a Java method. It’s obvious that it returns from
-      the function and not from the loop or block. Kotlin allows you to preserve the same
-      behavior when you switch from language features to functions that take lambdas as
-      arguments.
-    * Using the return expres-
-      sion in lambdas passed to non-inline functions isn’t allowed. A non-inline function
-      can save the lambda passed to it in a variable and execute it later, when the function
-      has already returned, so it’s too late for the lambda to affect when the surrounding
-      function returns.
-    * You can write a local return from a lambda expression as well. A local return in a
-      lambda is similar to a break expression in a for loop.
-      * Returns from a lambda use
-        the “@” character to mark a label
-      * people.forEach label@{
-            if (it.name == "Alice") return@label
-        }
-        people.forEach @{
-                    if (it.name == "Alice") return@forEach
-                }
-#### Anonymous functions return
-* Anonymous functions: local returns by default
-    fun lookForAlice(people: List<Person>) {
-    people.forEach(fun (person) {
-    if (person.name == "Alice") return // “return” refers to the closest function: an anonymous function
-    println("${person.name} is not Alice")
-    })
-    }
-    * The rule is simple: return returns
-      from the closest function declared using the fun keyword. Lambda expressions don’t use the
-      fun keyword, so a return in a lambda returns from the outer function.
