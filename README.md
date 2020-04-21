@@ -75,80 +75,57 @@
         a function interface
 
 ## functions
-* Under the hood, function types are declared as regular interfaces: a variable of a func-
-  tion type is an implementation of a FunctionN interface
-  * Kotlin standard library
-    defines a series of interfaces, corresponding to different numbers of function argu-
-    ments: Function0<R> (this function takes no arguments), Function1<P1, R> (this
-    function takes one argument), and so on
-  * Each interface defines a single invoke
-    method, and calling it will execute the function
-  * Java 8 lamb-
-    das are automatically converted to values of function types
-* In members of a class, this refers to the class instance. In extension functions, this refers
-  to the instance that the extension function was applied to.
-* Kotlin allows us to take this a step further by supporting functions declared inside other
-  functions. These are called local or nested functions. Functions can even be nested multiple
-  times.
-* In addition to member functions and local functions, Kotlin also supports declaring top-
-  level functions. These are functions that exist outside of any class, object, or interface and
-  are defined directly inside a file.
-* Named parameters
-* Default parameters
-* Single abstract methods
-    * Kotlin has support for converting a function literal directly
-      into a SAM
-    
+* `FunctionN` interface
+    * `Function0<R>` (this function takes no arguments)
+    * `Function1<P1, R>` (this function takes one argument), and so on
+    * each interface defines a single `invoke` method
+* `this`
+    * in members of a class - refers to the class instance
+    * in extension functions - refers to the instance that the extension function was applied to
+* support for functions declared inside other functions
+    * called local or nested functions
+* support for top-level functions - defined directly inside a file
+* java context - automatic SAM conversion
+    ```
     val threadPool = Executors.newFixedThreadPool(4)
-    threadPool.submit {
-    println("I don't have a lot of work to do")
-    }
-    
-    same as
-    
-    threadPool.submit(object : Runnable {
-    override fun run() {
-    println("I don't have a lot of work to do")
-    }
+    val hello: () -> Unit = { println("hello") }
+    threadPool.submit(hello)
+    run(hello)
+  
+    fun run(block: Runnable) = block.run()
+    ```
+    under the hood is
+    ```
+    threadPool.submit(object : Runnable { // anonymous inner class implementing Runnable
+        override fun run() {
+            println("hello")
+        }
     })
-    * works for interfaces and not abstract classes,
-      even if the abstract class only has a single method
-    * Kotlin will not perform this conversion on SAMs that are defined in Kotlin
-      itself. This is because in Kotlin, you can define your function to accept
-      another function, making this kind of pattern redundant
-      ```
-      interface X : () -> Unit {
-          fun x(): Unit
-      }
-      
-      class Y {
-          fun z(x: Runnable) {
-          }
-      }
-      
-      fun main() {
-          val x: X = { println("a") }
-          Y().z { println("a") }
-      }
-      ```
+    ```
+    but there is no explicit conversion between java's functional interfaces and kotlin's function types 
+    ```
+    var javaRun: Runnable = Runnable { println("run!") }
+    var kotlinRun: () -> Unit = { println("run!") }
+    javaRun = kotlinRun
+    kotlinRun = javaRun
+    ```
+
 ## lambda
-* a lambda encodes a small piece of behavior that you can pass around as a value
+* encodes a small piece of behavior that you can pass around as a value
 * syntax
     ```
     val sum = { x: Int, y: Int -> x + y }
     println(sum(1, 2)  
     ```
-* in Kotlin, a syntactic convention lets you move a lambda expression out of parentheses if it’s 
-the last argument in a function call.
-   * When the lambda is the only argument to a function, you can also remove the empty
-     parentheses from the call:
-   ```
-   * people.maxBy({ p: Person -> p.age })
-   * people.maxBy() { p: Person -> p.age }
-   * people.maxBy { p: Person -> p.age }
-   * people.maxBy { p -> p.age } // Parameter type inferred
-   * people.maxBy { it.age } // it syntax
-  ```
+* lambda could be moved out of parentheses if it’s the last argument in a function call.
+    * if the only argument to a function - empty parentheses could be removed
+    ```
+    people.maxBy({ p: Person -> p.age })
+    people.maxBy() { p: Person -> p.age }
+    people.maxBy { p: Person -> p.age }
+    people.maxBy { p -> p.age } // Parameter type inferred
+    people.maxBy { it.age } // it syntax
+    ```
 * If you use a lambda in a function, you can access the parameters of that function as well as the local 
 variables declared before the lambda
     * One important difference between Kotlin and Java is that in Kotlin, you aren’t restricted to accessing 
