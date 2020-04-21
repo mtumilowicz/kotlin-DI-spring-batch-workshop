@@ -11,9 +11,12 @@
     * introduce basic kotlin syntax
     * discuss kotlin's concept of function and lambda
     * gentle introduction into spring batch fundamentals
+    * implementing domain in a framework-agnostic manner (by applying hexagonal architecture)
+    * show canonical example of DI container usage to decouple configuration and implementation
 * workshop: workshop package, answers: answers package
 
 ## task
+* `task/anomaly_detection.pdf`
 
 ## basic kotlin syntax
 * `val` vs `var` = `final` vs `non-final`
