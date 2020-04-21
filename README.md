@@ -3,6 +3,8 @@
 * https://www.manning.com/books/kotlin-in-action
 * https://marcin-chwedczuk.github.io/lambda-expressions-in-kotlin
 * https://www.packtpub.com/application-development/programming-kotlin
+* https://stackoverflow.com/questions/53810536/how-can-i-get-sam-interfaces-object-in-kotlin
+* https://github.com/JetBrains/kotlin/blob/master/spec-docs/function-types.md
 
 ## preface
 * goals of this workshop:
@@ -64,25 +66,25 @@
     ```
     * equivalent of Stream types
     * a sequence of elements that can be enumerated one by one
-    * intermediate and terminal operations
-        * map passes function to the constructor of a class that stores it in a property
-            ```
-            fun <T, R> Sequence<T>.map(transform: (T) -> R): Sequence<R> {
-                return TransformingSequence(this, transform)
-            }
-            ```
-        * needs non-inline representation of lambda - passed is an anonymous class implementing 
-        a function interface
+    * intermediate sequence is represented as an object storing a lambda in its field, and the 
+    terminal operation causes a chain of calls through each intermediate sequence to be performed
+        ```
+        fun <T, R> Sequence<T>.map(transform: (T) -> R): Sequence<R> {
+            return TransformingSequence(this, transform)
+        }
+        ```
 
 ## function
 ```
 fun run() {}
 val run: () -> Unit = ::run
 ```
-* `FunctionN` interface
-    * `Function0<R>` (this function takes no arguments)
-    * `Function1<P1, R>` (this function takes one argument), and so on
-    * each interface defines a single `invoke` method
+* a variable of a function type is an instance of a class implementing `FunctionN` interface
+    ```
+    public interface Function1<in P1, out R> : Function<R> {
+        public operator fun invoke(p1: P1): R
+    }
+    ```
 * support for top-level functions - defined directly inside a file
 * `this`
     * top-level - no context
@@ -151,91 +153,22 @@ val run: () -> Unit = ::run
     * val createPerson = ::Person // constructor reference
 
 ### compilation
-* creating an anonymous object that implements Runnable explicitly:
-  postponeComputation(1000, object : Runnable {
-    override fun run() {
-    println(42)
-    }
-  })
-  * When you explicitly declare an object, a new instance is cre-
-    ated on each invocation. With a lambda, the situation is different: if the lambda
-    doesn’t access any variables from the function where it’s defined, the corresponding
-    anonymous class instance is reused between calls:
-    postponeComputation(1000) { println(42) } // One instance of Runnable is created for the entire program
-  * If the lambda captures variables from the surrounding scope, it’s no longer possible to
-    reuse the same instance for every invocation. In that case, the compiler creates a new
-    object for every call and stores the values of the captured variables in that object
-* Lambda implementation details
-    * As of Kotlin 1.0, every lambda expression is compiled into an anonymous class,
-      unless it’s an inline lambda
-    * The name of the class is derived by add-
-      ing a suffix from the name of the function in which the lambda is declared: Handle-
-      Computation$1
-    * From the compiler’s point of view, the lambda is a block of code, not an object, and
-      you can’t refer to it as an object. The this reference in a lambda refers to a sur-
-      rounding class.
-* Inline functions: removing the overhead of lambdas
-    * we explained that lambdas are normally compiled to anonymous
-      classes. But that means every time you use a lambda expression, an extra class is cre-
-      ated; and if the lambda captures some variables, then a new object is created on every
-      invocation
-    *  introduces runtime overhead, causing an implementation that uses a
-      lambda to be less efficient than a function that executes the same code directly
-    * If you mark a function with the inline
-      modifier, the compiler won’t generate a function call when this function is used and
-      instead will replace every call to the function with the actual code implementing the
-      function
-    * When you declare a function as inline , its body is inlined—in other words, it’s substi-
-      tuted directly into places where the function is called instead of being invoked nor-
-      mally
-    * lambdas used to
-      process a sequence aren’t inlined. Each intermediate sequence is represented as an
-      object storing a lambda in its field, and the terminal operation causes a chain of calls
-      through each intermediate sequence to be performed
-    * For regular function calls, the JVM already provides powerful inlining support. It
-      analyzes the execution of your code and inlines calls whenever doing so provides the
-      most benefit. This happens automatically while translating bytecode to machine code.
-    * If we were to mark the withResource function as inline, then the Kotlin compiler would
-      not generate this as an invocation on a new instance, but instead would generate the code at
-      the call site.
-      Firstly, we annotate the function with the keyword:
-      inline fun <T : AutoCloseable, U> withResource(resource: T, fn: (T) ->
-      U): U {
-      try {
-      return fn(resource)
-      } finally {
-      resource.close()
-      }
-      }
-      The compiler would translate an invocation of characterCount into the following:
-      fun characterCountExpanded(filename: String): Int {
-      val input = Files.newInputStream(Paths.get(filename))
-      try {
-      return input.buffered().reader().readText().length
-      } finally {
-      input.close()
-      }
-      }
-* It turns out that all functions in Kotlin are compiled into instances of classes called
-  Function0 , Function1 , Function2 , and so on
-  * For example, a function with the signature
-    (Int)->Boolean would show the type as Function1<Int, Boolean> 
-  * Each of the
-    function classes also has an invoke member function that is used to apply the body of the
-    function.
-  ```
-  /** A function that takes 1 argument. */
-  public interface Function1<in P1, out R> : Function<R> {
-  /** Invokes the function with the specified argument. */
-  public operator fun invoke(p1: P1): R
-  }
-  ```
-  *  Since functions have no state other than their inputs, they can be modeled as a
-    singleton instance via a static method.
-    Closures are implemented by increasing the arity of the function to accept
-    extra parameters, which are the closed-over variables. The compiler inserts
-    this automatically.
-
+* Kotlin 1.0 - every lambda expression is compiled into an anonymous class, unless it’s an inline lambda
+* name: `Method$1`, where `Method` - name of the function in which the lambda is declared
+* the lambda is a block of code, not an objectc - `this` refers to a surrounding class
+* if the lambda doesn’t access any variables from the function where it’s defined, the corresponding 
+anonymous class instance is reused between calls
+    * no state - they can be modeled as a singleton instance via a static method
+    * a singleton is created that is used for every subsequent method call
+    * capturing variables - new object for every call with variables stored inside it
+    
+### inline functions: removing the overhead of lambdas
+* lambda compilation introduces runtime overhead, causing an implementation that uses a
+  lambda to be less efficient than a function that executes the same code directly
+* inline modifier - the compiler will replace every call with the body of lambda
+* lambdas used to process a sequence can’t be inlined
+* remember that JVM already provides powerful inlining support (JIT)
+    
 ### return
 * Return statements in lambdas: return from an enclosing function
     * If you use the return keyword in a lambda, it returns from the function in which you called
