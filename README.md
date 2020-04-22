@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/mtumilowicz/kotlin-DI-spring-batch-workshop.svg?branch=master)](https://travis-ci.com/mtumilowicz/kotlin-DI-spring-batch-workshop)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 # kotlin-DI-spring-batch-workshop
 
 * https://www.manning.com/books/kotlin-in-action
