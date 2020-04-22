@@ -24,6 +24,29 @@ own ideas and experiment
 ## task
 * `task/anomaly_detection.pdf`
 
+### exemplary solution
+1. domain is framework-agnostic by applying hexagonal architecture
+1. all integrations with files (measures and anomalies) are configured and performed in 
+`infrastructure.configuration.repo`
+    * measures are read one by one using spring batch API
+    * anomalies are read all at once during startup to the app memory using gson API
+1. paths to files are defined in `application-env.properties`, where `env` is a spring profile name that we want to 
+trigger
+    * `application.properties` stays for `dev`
+    * there are defined tasks (in `build.gradle`) to facilitate running app using the specific profile
+        * tasks: `bootRunDev`, `bootRunProd`
+        * profiles: `dev`, `prod`
+1. after start of application - `ApplicationRunner` is triggered to handle printing of anomalies - it is configured in
+main file: `App`
+1. to add new anomaly feature, simply:
+    * create new package: `domain.anomaly.newanomalyname`
+    * implement anomaly definition by implementing interface `AnomalyDefinition`
+    * implement anomaly detector by implementing interface `AnomalyDetector`
+    * configure and produce it in `AnomalyDetectorConfig`
+    * rest will be handled by DI container and `MeasurementService` automatically
+1. all tests (unit + functional) are implemented in `tests.groovy.app`
+1. all builds are performed by TravisCI which verifies compliance of branches and pull-requests as well
+
 ## basic kotlin syntax
 * `val` vs `var` = `final` vs `non-final`
 * string templates: "#{person.name} has accomplished test with $score"
