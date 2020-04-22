@@ -13,6 +13,7 @@
     * introduce basic kotlin syntax
     * discuss kotlin's concept of function and lambda
     * introduction to parse file part by part without loading it into memory (spring batch)
+    * introduction to parsing JSON with Gson
     * implementing domain in a framework-agnostic manner (by applying hexagonal architecture)
     * show canonical example of DI container usage to decouple configuration and implementation
 * workshop: workshop package, answers: answers package
@@ -193,3 +194,21 @@ anonymous class instance is reused between calls
 * remember that JVM already provides powerful inlining support (JIT)
 
 ## spring batch
+* automated, complex processing of large volumes of information that is most efficiently processed 
+without user interaction
+    * typically include time-based events (such as month-end calculations, notices, or correspondence)
+* provides support for reading and Writing an array of JSON objects corresponding to individual items
+    * interface `JsonItemReader` - intended to be implemented by using a streaming API to read JSON 
+    objects in chunks
+    * to be able to process JSON records, the following is needed:
+        * resource - the JSON file to read
+        * `JsonObjectReader` - to parse and bind JSON objects to items
+            ```
+            public JsonItemReader<Trade> jsonItemReader() {
+               return new JsonItemReaderBuilder<Trade>() // class that we are parsing JSON into
+                             .jsonObjectReader(new JacksonJsonObjectReader<>(Trade.class))
+                             .resource(new ClassPathResource("trades.json")) // path to resource, could be FileSystemResource as well
+                             .name("tradeJsonItemReader") // name in case of producing as a bean
+                             .build();
+            }
+            ```
