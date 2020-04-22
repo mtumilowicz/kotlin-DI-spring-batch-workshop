@@ -16,7 +16,8 @@
     * introduction to parsing JSON with Gson
     * implementing domain in a framework-agnostic manner (by applying hexagonal architecture)
     * show canonical example of DI container usage to decouple configuration and implementation
-* workshop: workshop package, answers: answers package
+* workshop: exemplary project is in: `app.answers` with full tests, but feel free to start with
+own ideas and experiment
 
 ## task
 * `task/anomaly_detection.pdf`
