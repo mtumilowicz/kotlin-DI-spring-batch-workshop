@@ -12,7 +12,7 @@
 * goals of this workshop:
     * introduce basic kotlin syntax
     * discuss kotlin's concept of function and lambda
-    * gentle introduction into spring batch fundamentals
+    * introduction to parse file part by part without loading it into memory (spring batch)
     * implementing domain in a framework-agnostic manner (by applying hexagonal architecture)
     * show canonical example of DI container usage to decouple configuration and implementation
 * workshop: workshop package, answers: answers package
